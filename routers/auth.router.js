@@ -21,7 +21,7 @@ Router definition
 
         routes(){
             // Auth: register user
-            this.router.get('/register', (req, res) => {
+            this.router.post('/register', (req, res) => {
                 // Check body data
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
                     return sendBodyError(`/api/auth/register`, 'POST', res, 'No data provided in the reqest body')
@@ -42,7 +42,7 @@ Router definition
             })
 
              // Auth: login user
-             this.router.get('/login', (req, res) => {
+             this.router.post('/login', (req, res) => {
                 // Check body data
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
                     return sendBodyError(`/api/auth/login`, 'POST', res, 'No data provided in the reqest body')
