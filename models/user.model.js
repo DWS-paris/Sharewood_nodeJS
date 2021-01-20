@@ -22,6 +22,13 @@ Definition
         // Définir une valeur de propriété unique
         email: { unique: true, type: String },
 
+        // Aggregation
+        posts: [{
+            type: Schema.Types.ObjectId,
+            ref: 'post',
+            default: []
+        }],
+
         // Définir une valeur par défaut
         creationDate: { type: Date, default: new Date() },
         lastConnection: { type: Date, default: new Date() },
@@ -46,14 +53,7 @@ Methods
             
             // Set timeout
             expireIn: '10s',
-            exp: parseInt( expiryToken.getTime() / 100, 10 ),
-
-            // Aggregation
-            posts: [{
-                type: Schema.Types.ObjectId,
-                ref: 'post',
-                default: []
-            }]
+            exp: parseInt( expiryToken.getTime() / 100, 10 )
         }
 
         // Retunr JWT

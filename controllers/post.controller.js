@@ -11,6 +11,7 @@ CRUD methods
         return new Promise( (resolve, reject) => {
             Models.post.create( req.body )
             .then( async data => {
+
                 // Update user
                 const updatedUser = await Models.user.updateOne(
                     { _id: req.user._id },
