@@ -16,7 +16,7 @@ Definition
         text: String,
 
         // Associer le profil utilisateur
-        sender: {
+        author: {
             type: Schema.Types.ObjectId,
             ref: 'user'
         },

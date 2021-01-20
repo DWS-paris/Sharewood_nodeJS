@@ -11,21 +11,28 @@ Definition
     const MySchema = new Schema({
         // Schema.org
         '@context': { type: String, default: 'http://schema.org' },
-        '@type': { type: String, default: 'Message' },
+        '@type': { type: String, default: 'Conversation' },
 
         description: String,
 
         // Associer les profils utilisateurs
         contributors: [{
             type: Schema.Types.ObjectId,
-            ref: 'user'
+            ref: 'user',
+            default: []
         }],
 
-        // Associer la conversation
+        // Associer les messages
         messages: [{
             type: Schema.Types.ObjectId,
-            ref: 'message'
+            ref: 'message',
+            default: []
         }],
+
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: 'user'
+        },
 
         // Définir une valeur par défaut
         creationDate: { type: Date, default: new Date() },

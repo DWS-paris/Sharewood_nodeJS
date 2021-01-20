@@ -29,6 +29,18 @@ Definition
             default: []
         }],
 
+        conversations: [{
+            type: Schema.Types.ObjectId,
+            ref: 'conversation',
+            default: []
+        }],
+
+        messages: [{
+            type: Schema.Types.ObjectId,
+            ref: 'message',
+            default: []
+        }],
+
         // Définir une valeur par défaut
         creationDate: { type: Date, default: new Date() },
         lastConnection: { type: Date, default: new Date() },
