@@ -10,7 +10,15 @@ CRUD methods
     const createOne = req => {
         return new Promise( (resolve, reject) => {
             Models.post.create( req.body )
-            .then( data => resolve(data))
+            .then( async data => {
+                // Update user
+                const updatedUser = await Models.user.updateOne(
+                    { _id: req.user._id },
+                    { $push: { posts: data._id } }
+                )
+
+                return resolve({ data, updatedUser })
+            })
             .catch( err => reject(err) )
         })
     }

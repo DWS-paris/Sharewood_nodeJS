@@ -23,6 +23,9 @@ Router definition
         routes(){
             // CRUD: Create one item
             this.router.post('/:endpoint', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+
+                console.log(req.user)
+
                 // Check body data
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
                     return sendBodyError(`/api/${req.params.endpoint}`, 'POST', res, 'No data provided in the reqest body')

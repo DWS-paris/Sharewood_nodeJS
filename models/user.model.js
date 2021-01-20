@@ -46,7 +46,14 @@ Methods
             
             // Set timeout
             expireIn: '10s',
-            exp: parseInt( expiryToken.getTime() / 100, 10 )
+            exp: parseInt( expiryToken.getTime() / 100, 10 ),
+
+            // Aggregation
+            posts: [{
+                type: Schema.Types.ObjectId,
+                ref: 'post',
+                default: []
+            }]
         }
 
         // Retunr JWT
