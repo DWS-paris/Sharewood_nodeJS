@@ -1,7 +1,9 @@
 /* 
 Import
 */
+    // Inner
     const Models = require('../models/index');
+    const { cryptData, decryptData } = require('../services/crypto.service')
 //
 
 /* 
