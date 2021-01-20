@@ -56,7 +56,6 @@ Server class
             const backendRouter = new BackendRouterClass();
             this.server.use('/', backendRouter.init());
 
-
             // Launch server
             this.launch();
         }
