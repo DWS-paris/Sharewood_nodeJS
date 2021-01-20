@@ -55,7 +55,7 @@ Router definition
                     if( !ok ){ return sendFieldsError(`/api/auth/login`, 'POST', res, 'Bad fields provided', miss, extra) }
                     else{
                         // Create new object
-                        Controllers.user.login(req)
+                        Controllers.user.login(req, res)
                         .then( apiResponse => sendApiSuccessResponse(`/api/auth/login`, 'POST', res, 'Request succeed', apiResponse) )
                         .catch( apiError => sendApiErrorResponse(`/api/auth/login`, 'POST', res, 'Request failed', apiError) );
                     }
