@@ -24,7 +24,7 @@ CRUD methods
                     { $push: { messages: data._id } }
                 )
 
-                return resolve({ data, updatedUser, updatedConversation })
+                return resolve( await readOne(data._id) )
             })
             .catch( err => reject(err) )
         })
@@ -32,18 +32,33 @@ CRUD methods
 
     const readOne = _id => {
         return new Promise( (resolve, reject) => {
-            Models.message.findById( _id, (err, data) => {
+            Models.message.findOne( { _id: _id } )
+            .populate('author', ['-__v', '-messages', '-posts', '-conversations'])
+            .populate('conversation', ['-__v', '-messages'])
+            .exec( (err, data) => {
                 if( err ){ return reject(err) }
-                else{ return resolve(data) }
+                else{ 
+                    data.author = decryptData(data.author, 'givenName', 'familyName')
+
+                    // TODO: check user password from cookie
+                    return resolve(data) 
+                }
             })
         })
     }
 
     const readAll = () => {
         return new Promise( (resolve, reject) => {
-            Models.message.find( (err, data) => {
+            Models.message.find( async (err, data) => {
                 if( err ){ return reject(err) }
-                else{ return resolve(data) }
+                else{ 
+                    let dataCollection = [];
+                    for( let item of data ){
+                        dataCollection.push( await readOne(item._id) )
+                    }
+
+                    return resolve(dataCollection);
+                }
             })
         })
     }
