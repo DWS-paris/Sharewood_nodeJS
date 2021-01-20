@@ -2,7 +2,9 @@
 Definition
 */
     const Mandatory = {
-        post: ['headline', 'body']
+        post: ['headline', 'body'],
+        register: ['givenName', 'familyName', 'password', 'email'],
+        login: ['email', 'password'],
     }
 //
 

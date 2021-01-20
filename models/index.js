@@ -2,7 +2,8 @@
 Definition
 */
     const Models = {
-        post: require('./post.model')
+        post: require('./post.model'),
+        user: require('./user.model')
     }
 //
 

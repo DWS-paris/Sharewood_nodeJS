@@ -56,6 +56,11 @@ Server class
 
         config(){
             // Setup API router
+            const AuthRouterClass = require('./routers/auth.router');
+            const authRouter = new AuthRouterClass();
+            this.server.use('/api/auth', authRouter.init());
+
+            // Setup API router
             const ApiRouterClass = require('./routers/api.router');
             const apiRouter = new ApiRouterClass();
             this.server.use('/api', apiRouter.init());

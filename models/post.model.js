@@ -16,6 +16,12 @@ Definition
         headline: String,
         body: String,
 
+        // Associer le profil utilisateur
+        author: {
+            type: Schema.Types.ObjectId,
+            ref: 'user'
+        },
+
         // Définir une valeur par défaut
         creationDate: { type: Date, default: new Date() },
         dateModified: { type: Date, default: new Date() },

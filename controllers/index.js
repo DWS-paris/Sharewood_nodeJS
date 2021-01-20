@@ -2,7 +2,8 @@
 Definition
 */
     const Controllers = {
-        post: require('./post.controller')
+        post: require('./post.controller'),
+        user: require('./user.controller')
     }
 //
 
