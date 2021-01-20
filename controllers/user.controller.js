@@ -45,7 +45,7 @@ CRUD methods
                         res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
 
                         // Decrypt personal data
-                        const clearData = decryptData(data, ['givenName', 'familyName'])
+                        const clearData = decryptData(data, 'givenName', 'familyName')
 
                         return resolve(clearData);
                     }
