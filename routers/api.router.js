@@ -15,13 +15,14 @@ Imports
 Router definition
 */
     class ApiRooter{
-        constructor(){
+        constructor( { passport } ){
             this.router = express.Router();
+            this.passport = passport;
         }
 
         routes(){
             // CRUD: Create one item
-            this.router.post('/:endpoint', (req, res) => {
+            this.router.post('/:endpoint', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                 // Check body data
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
                     return sendBodyError(`/api/${req.params.endpoint}`, 'POST', res, 'No data provided in the reqest body')
@@ -33,6 +34,9 @@ Router definition
                     // Error: bad fields provided
                     if( !ok ){ return sendFieldsError(`/api/${req.params.endpoint}`, 'POST', res, 'Bad fields provided', miss, extra) }
                     else{
+                        // Define author _id
+                        req.body.author = req.user._id;
+
                         // Create new object
                         Controllers[req.params.endpoint].createOne(req)
                         .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request succeed', apiResponse) )
@@ -58,7 +62,7 @@ Router definition
             })
 
             // CRUD: Update all item
-            this.router.put('/:endpoint/:_id', (req, res) => {
+            this.router.put('/:endpoint/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                 // Check body data
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
                     return sendBodyError(`/api/${req.params.endpoint}/${req.params._id}`, 'PUT', res, 'No data provided in the reqest body')
@@ -79,7 +83,7 @@ Router definition
             })
 
             // CRUD: Delete all item
-            this.router.delete('/:endpoint/:_id', (req, res) => {
+            this.router.delete('/:endpoint/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                 // Use the controller to delete data
                 Controllers[req.params.endpoint].deleteOne(req)
                 .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'DELETE', res, 'Request succeed', apiResponse) )

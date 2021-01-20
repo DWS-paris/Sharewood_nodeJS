@@ -55,6 +55,10 @@ Server class
         }
 
         config(){
+            // Set authentication
+            const { setAutentication } = require('./services/auth.service');
+            setAutentication(passport);
+
             // Setup API router
             const AuthRouterClass = require('./routers/auth.router');
             const authRouter = new AuthRouterClass();
@@ -62,7 +66,7 @@ Server class
 
             // Setup API router
             const ApiRouterClass = require('./routers/api.router');
-            const apiRouter = new ApiRouterClass();
+            const apiRouter = new ApiRouterClass( { passport } );
             this.server.use('/api', apiRouter.init());
 
             // Setup backend router
