@@ -46,6 +46,18 @@ Server class
             //=> Use CookieParser to setup serverside cookies
             this.server.use(cookieParser(process.env.COOKIE_SECRET));
 
+            // Start server configuration
+            this.config();
+        }
+
+        config(){
+            // Setup backend router
+            const BackendRouterClass = require('./routers/backend.router')
+            const backendRouter = new BackendRouterClass();
+            this.server.use('/', backendRouter.init());
+
+
+            // Launch server
             this.launch();
         }
 
