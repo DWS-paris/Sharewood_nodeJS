@@ -30,9 +30,9 @@ CRUD methods
         })
     }
 
-    const readOne = req => {
+    const readOne = _id => {
         return new Promise( (resolve, reject) => {
-            Models.message.findById( req.params._id, (err, data) => {
+            Models.message.findById( _id, (err, data) => {
                 if( err ){ return reject(err) }
                 else{ return resolve(data) }
             })

@@ -56,7 +56,7 @@ Router definition
             // CRUD: Read one item
             this.router.get('/:endpoint/:_id', (req, res) => {
                 // Use the controller to get one data
-                Controllers[req.params.endpoint].readOne(req)
+                Controllers[req.params.endpoint].readOne(req.params._id)
                 .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'GET', res, 'Request succeed', apiResponse) )
                 .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'GET', res, 'Request failed', apiError) );
             })

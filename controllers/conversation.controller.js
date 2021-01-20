@@ -1,7 +1,9 @@
 /* 
 Import
 */
+    // Inner
     const Models = require('../models/index');
+    const { cryptData, decryptData } = require('../services/crypto.service')
 //
 
 /* 
@@ -24,31 +26,34 @@ CRUD methods
         })
     }
 
-    const readOne = req => {
+    const readOne = _id => {
         return new Promise( (resolve, reject) => {
-            Models.conversation.findOne( { _id: req.params._id } )
-            .populate('author')
-            .populate('messages', ['-author', '-__v', '-isPublished'])
+            Models.conversation.findOne( { _id: _id } )
+            .populate('author', ['-__v', '-messages', '-posts', '-conversations'])
+            .populate('messages', ['-author', '-__v', '-isPublished', '-isPartOf'])
             .exec( (err, data) => {
                 if( err ){ return reject(err) }
                 else{ 
+                    data.author = decryptData(data.author, 'givenName', 'familyName')
                     // TODO: check user password from cookie
                     return resolve(decryptData(data, 'givenName', 'familyName')) 
                 }
-            })
-
-            Models.conversation.findById( req.params._id, (err, data) => {
-                if( err ){ return reject(err) }
-                else{ return resolve(data) }
             })
         })
     }
 
     const readAll = () => {
         return new Promise( (resolve, reject) => {
-            Models.conversation.find( (err, data) => {
+            Models.conversation.find( async (err, data) => {
                 if( err ){ return reject(err) }
-                else{ return resolve(data) }
+                else{ 
+                    let dataCollection = [];
+                    for( let item of data ){
+                        dataCollection.push( await readOne(item._id) )
+                    }
+
+                    return resolve(dataCollection);
+                }
             })
         })
     }
