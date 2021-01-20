@@ -61,7 +61,10 @@ CRUD methods
             .populate('posts', ['-author', '-__v', '-isPublished'])
             .exec( (err, data) => {
                 if( err ){ return reject(err) }
-                else{ return resolve(decryptData(data, 'givenName', 'familyName')) }
+                else{ 
+                    // TODO: check user password from cookie
+                    return resolve(decryptData(data, 'givenName', 'familyName')) 
+                }
             })
         })
     }
