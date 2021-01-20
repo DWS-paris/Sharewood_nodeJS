@@ -36,7 +36,7 @@ Router definition
                         // Create new object
                         Controllers[req.params.endpoint].createOne(req)
                         .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiapiErrororResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request failed', apiError) );
+                        .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request failed', apiError) );
                     }
                 }
             })
@@ -46,7 +46,7 @@ Router definition
                 // Use the controller to get all data
                 Controllers[req.params.endpoint].readAll()
                 .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}`, 'GET', res, 'Request succeed', apiResponse) )
-                .catch( apiError => sendApiapiErrororResponse(`/api/${req.params.endpoint}`, 'GET', res, 'Request failed', apiError) );
+                .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}`, 'GET', res, 'Request failed', apiError) );
             })
 
             // CRUD: Read one item
@@ -54,7 +54,7 @@ Router definition
                 // Use the controller to get one data
                 Controllers[req.params.endpoint].readOne(req)
                 .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'GET', res, 'Request succeed', apiResponse) )
-                .catch( apiError => sendApiapiErrororResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'GET', res, 'Request failed', apiError) );
+                .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'GET', res, 'Request failed', apiError) );
             })
 
             // CRUD: Update all item
@@ -73,7 +73,7 @@ Router definition
                         // Use the controller to update data
                         Controllers[req.params.endpoint].updateOne(req)
                         .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'PUT', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiapiErrororResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'PUT', res, 'Request failed', apiError) );
+                        .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'PUT', res, 'Request failed', apiError) );
                     }
                 }
             })
@@ -83,7 +83,7 @@ Router definition
                 // Use the controller to delete data
                 Controllers[req.params.endpoint].deleteOne(req)
                 .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'DELETE', res, 'Request succeed', apiResponse) )
-                .catch( apiError => sendApiapiErrororResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'DELETE', res, 'Request failed', apiError) );
+                .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}/${req.params._id}`, 'DELETE', res, 'Request failed', apiError) );
             })
         }
 

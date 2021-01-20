@@ -8,44 +8,44 @@ Import
 CRUD methods
 */
     const createOne = req => {
-        return new Promise( (resolve, rejetc) => {
+        return new Promise( (resolve, reject) => {
             Models.post.create( req.body )
             .then( data => resolve(data))
-            .catch( err => rejetc(err) )
+            .catch( err => reject(err) )
         })
     }
 
     const readOne = req => {
-        return new Promise( (resolve, rejetc) => {
+        return new Promise( (resolve, reject) => {
             Models.post.findById( req.params._id, (err, data) => {
-                if( err ){ return rejetc(err) }
+                if( err ){ return reject(err) }
                 else{ return resolve(data) }
             })
         })
     }
 
     const readAll = () => {
-        return new Promise( (resolve, rejetc) => {
+        return new Promise( (resolve, reject) => {
             Models.post.find( (err, data) => {
-                if( err ){ return rejetc(err) }
+                if( err ){ return reject(err) }
                 else{ return resolve(data) }
             })
         })
     }
 
     const updateOne = req => {
-        return new Promise( (resolve, rejetc) => {
+        return new Promise( (resolve, reject) => {
             Models.post.findOneAndUpdate( { _id: req.params._id }, req.body, (err, data) => {
-                if( err ){ return rejetc(err) }
+                if( err ){ return reject(err) }
                 else{ return resolve(data) }
             })
         })
     }
 
     const deleteOne = req => {
-        return new Promise( (resolve, rejetc) => {
+        return new Promise( (resolve, reject) => {
             Models.post.findByIdAndRemove( { _id: req.params._id }, (err, data) => {
-                if( err ){ return rejetc(err) }
+                if( err ){ return reject(err) }
                 else{ return resolve(data) }
             })
         })

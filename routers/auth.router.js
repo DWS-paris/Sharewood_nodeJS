@@ -36,7 +36,7 @@ Router definition
                         // Create new object
                         Controllers.user.register(req)
                         .then( apiResponse => sendApiSuccessResponse(`/api/auth/register`, 'POST', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiapiErrororResponse(`/api/auth/register`, 'POST', res, 'Request failed', apiError) );
+                        .catch( apiError => sendApiErrorResponse(`/api/auth/register`, 'POST', res, 'Request failed', apiError) );
                     }
                 }
             })
@@ -57,7 +57,7 @@ Router definition
                         // Create new object
                         Controllers.user.login(req)
                         .then( apiResponse => sendApiSuccessResponse(`/api/auth/login`, 'POST', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiapiErrororResponse(`/api/auth/login`, 'POST', res, 'Request failed', apiError) );
+                        .catch( apiError => sendApiErrorResponse(`/api/auth/login`, 'POST', res, 'Request failed', apiError) );
                     }
                 }
             })
