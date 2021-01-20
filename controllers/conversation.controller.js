@@ -11,6 +11,10 @@ CRUD methods
 */
     const createOne = req => {
         return new Promise( (resolve, reject) => {
+            // Set first contributor
+            req.body.contributors = [req.user._id]
+
+            // Create new conversation
             Models.conversation.create( req.body )
             .then( async data => {
 
@@ -20,7 +24,8 @@ CRUD methods
                     { $push: { conversations: data._id } }
                 )
 
-                return resolve({ data, updatedUser })
+                // Return data
+                return resolve( await readOne(data._id))
             })
             .catch( err => reject(err) )
         })
@@ -30,11 +35,18 @@ CRUD methods
         return new Promise( (resolve, reject) => {
             Models.conversation.findOne( { _id: _id } )
             .populate('author', ['-__v', '-messages', '-posts', '-conversations'])
+            .populate('contributors', ['-__v', '-messages', '-posts', '-conversations'])
             .populate('messages', ['-author', '-__v', '-isPublished', '-isPartOf'])
             .exec( (err, data) => {
                 if( err ){ return reject(err) }
                 else{ 
+                    let contributors = []
+                    for( let item of data.contributors ){
+                        contributors.push( decryptData(item, 'givenName', 'familyName' ))
+                    }
                     data.author = decryptData(data.author, 'givenName', 'familyName')
+                    data.contributor = contributors
+
                     // TODO: check user password from cookie
                     return resolve(decryptData(data, 'givenName', 'familyName')) 
                 }
