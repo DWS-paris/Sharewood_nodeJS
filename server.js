@@ -51,6 +51,11 @@ Server class
         }
 
         config(){
+            // Setup API router
+            const ApiRouterClass = require('./routers/api.router')
+            const apiRouter = new ApiRouterClass();
+            this.server.use('/api', apiRouter.init());
+
             // Setup backend router
             const BackendRouterClass = require('./routers/backend.router')
             const backendRouter = new BackendRouterClass();
