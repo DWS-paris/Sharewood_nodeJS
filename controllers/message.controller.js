@@ -15,13 +15,13 @@ CRUD methods
             .then( async data => {
 
                 // Update user
-                const updatedUser = await Models.user.updateOne(
+                await Models.user.updateOne(
                     { _id: req.user._id },
                     { $push: { messages: data._id } }
                 )
 
                 // Update conversation
-                const updatedConversation = await Models.conversation.updateOne(
+                await Models.conversation.updateOne(
                     { _id: data.isPartOf },
                     { $push: { messages: data._id } }
                 )

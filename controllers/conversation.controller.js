@@ -48,7 +48,7 @@ CRUD methods
                     data.contributor = contributors
 
                     // TODO: check user password from cookie
-                    return resolve(decryptData(data, 'givenName', 'familyName')) 
+                    return resolve(data) 
                 }
             })
         })
