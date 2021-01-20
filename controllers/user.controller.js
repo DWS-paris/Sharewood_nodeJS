@@ -6,7 +6,7 @@ Import
     const bcrypt = require('bcrypt');
 
     // Inner
-    const { cryptData,decryptData } = require('../services/crypto.service')
+    const { cryptData, decryptData } = require('../services/crypto.service')
 //
 
 /* 
@@ -44,7 +44,10 @@ CRUD methods
                         // Set response cookie
                         res.cookie( process.env.COOKIE_NAME, userJwt, { maxAge: 700000, httpOnly: true } )
 
-                        return resolve(data);
+                        // Decrypt personal data
+                        const clearData = decryptData(data, ['givenName', 'familyName'])
+
+                        return resolve(clearData);
                     }
                 }
             })
