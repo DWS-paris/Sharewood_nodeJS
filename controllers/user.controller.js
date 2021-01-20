@@ -58,10 +58,10 @@ CRUD methods
         return new Promise( (resolve, reject) => {
             // Search user from email
             Models.user.findOne( { email: req.user.email } )
-            .populate('posts')
+            .populate('posts', ['-author', '-__v', '-isPublished'])
             .exec( (err, data) => {
                 if( err ){ return reject(err) }
-                else{ return resolve(data) }
+                else{ return resolve(decryptData(data, 'givenName', 'familyName')) }
             })
         })
     }
