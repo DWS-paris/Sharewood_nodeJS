@@ -26,6 +26,17 @@ CRUD methods
 
     const readOne = req => {
         return new Promise( (resolve, reject) => {
+            Models.conversation.findOne( { _id: req.params._id } )
+            .populate('author')
+            .populate('messages', ['-author', '-__v', '-isPublished'])
+            .exec( (err, data) => {
+                if( err ){ return reject(err) }
+                else{ 
+                    // TODO: check user password from cookie
+                    return resolve(decryptData(data, 'givenName', 'familyName')) 
+                }
+            })
+
             Models.conversation.findById( req.params._id, (err, data) => {
                 if( err ){ return reject(err) }
                 else{ return resolve(data) }

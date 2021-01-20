@@ -59,6 +59,8 @@ CRUD methods
             // Search user from email
             Models.user.findOne( { email: req.user.email } )
             .populate('posts', ['-author', '-__v', '-isPublished'])
+            .populate('conversations', ['-author', '-__v', '-isPublished'])
+            .populate('messages', ['-author', '-__v', '-isPublished'])
             .exec( (err, data) => {
                 if( err ){ return reject(err) }
                 else{ 
