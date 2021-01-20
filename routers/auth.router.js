@@ -15,8 +15,9 @@ Imports
 Router definition
 */
     class AuthRooter{
-        constructor(){
+        constructor( { passport } ){
             this.router = express.Router();
+            this.passport = passport;
         }
 
         routes(){
@@ -41,8 +42,8 @@ Router definition
                 }
             })
 
-             // Auth: login user
-             this.router.post('/login', (req, res) => {
+            // Auth: login user
+            this.router.post('/login', (req, res) => {
                 // Check body data
                 if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
                     return sendBodyError(`/api/auth/login`, 'POST', res, 'No data provided in the reqest body')
@@ -60,6 +61,14 @@ Router definition
                         .catch( apiError => sendApiErrorResponse(`/api/auth/login`, 'POST', res, 'Request failed', apiError) );
                     }
                 }
+            })
+
+            // Auth: user informations
+            this.router.get('/me', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                // Get data from the controller
+                Controllers.user.me(req, res)
+                .then( apiResponse => sendApiSuccessResponse(`/api/auth/me`, 'GET', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse(`/api/auth/me`, 'GET', res, 'Request failed', apiError) );
             })
         }
 
