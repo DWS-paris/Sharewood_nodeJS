@@ -57,13 +57,11 @@ CRUD methods
     const me = (req, res) => {
         return new Promise( (resolve, reject) => {
             // Search user from email
-            Models.user.findOne( { email: req.user.email }, (err, data) => {
-                if( err || data === null ){ return reject({err, data}) }
-                else{
-                    // Decrypt personal data
-                    const clearData = decryptData(data, 'givenName', 'familyName')
-                    return resolve(clearData);
-                }
+            Models.user.findOne( { email: req.user.email } )
+            .populate('posts')
+            .exec( (err, data) => {
+                if( err ){ return reject(err) }
+                else{ return resolve(data) }
             })
         })
     }
