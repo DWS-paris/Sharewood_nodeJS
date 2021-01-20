@@ -8,6 +8,9 @@ Imports
     const cookieParser = require('cookie-parser'); //=> https://www.npmjs.com/package/cookie-parser
     const passport = require('passport'); //=> https://www.npmjs.com/package/passport
     const path = require('path'); //=> https://www.npmjs.com/package/path
+
+    // Services
+    const MongoClass = require('./services/mongo.service')
 //
 
 /* 
@@ -17,6 +20,7 @@ Server class
         constructor(){
             this.server = express();
             this.port = process.env.PORT;
+            this.MongoDb = new MongoClass();
         }
 
         init(){
@@ -52,12 +56,12 @@ Server class
 
         config(){
             // Setup API router
-            const ApiRouterClass = require('./routers/api.router')
+            const ApiRouterClass = require('./routers/api.router');
             const apiRouter = new ApiRouterClass();
             this.server.use('/api', apiRouter.init());
 
             // Setup backend router
-            const BackendRouterClass = require('./routers/backend.router')
+            const BackendRouterClass = require('./routers/backend.router'); 
             const backendRouter = new BackendRouterClass();
             this.server.use('/', backendRouter.init());
 
@@ -66,12 +70,18 @@ Server class
         }
 
         launch(){
-            // Start server
-            this.server.listen(this.port, () => {
-                console.log({
-                    node: `http://localhost:${this.port}`
+            // Connect MongoDb
+            this.MongoDb.connectDb()
+            .then( db => {
+                // Start server
+                this.server.listen(this.port, () => {
+                    console.log({
+                        node: `http://localhost:${this.port}`,
+                        mongo: db.url
+                    })
                 })
             })
+            .catch( dbError => console.log('MongoDB error', dbError) )
         }
     }
 //
