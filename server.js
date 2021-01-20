@@ -9,3 +9,60 @@ Imports
     const passport = require('passport'); //=> https://www.npmjs.com/package/passport
     const path = require('path'); //=> https://www.npmjs.com/package/path
 //
+
+/* 
+Server class
+*/
+    class ServerClass{
+        constructor(){
+            this.server = express();
+            this.port = process.env.PORT;
+        }
+
+        init(){
+            // Set CORS middleware
+            this.server.use( (req, res, next) => {
+                // Allow actions for specific origins
+                res.header('Access-Control-Allow-Origin', ['*']);
+                res.header('Access-Control-Allow-Credentials', 'true');
+                res.header('Access-Control-Allow-Methods', ['GET', 'PUT', 'POST', 'DELETE', 'POST']);
+                res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+
+                // Enable access to specific origins
+                next();
+            });
+
+            // Set server view engine
+            this.server.set( 'view engine', 'ejs' );
+
+            // Static path configuration
+            this.server.set( 'views', __dirname + '/www' );
+            this.server.use( express.static(path.join(__dirname, 'www')) );
+
+            //=> Body-parser
+            this.server.use(bodyParser.json({limit: '10mb'}));
+            this.server.use(bodyParser.urlencoded({ extended: true }));
+
+            //=> Use CookieParser to setup serverside cookies
+            this.server.use(cookieParser(process.env.COOKIE_SECRET));
+
+            this.launch();
+        }
+
+        launch(){
+            // Start server
+            this.server.listen(this.port, () => {
+                console.log({
+                    node: `http://localhost:${this.port}`
+                })
+            })
+        }
+    }
+//
+
+/* 
+Start server
+*/
+    const NODEapi_boilerplate = new ServerClass();
+    NODEapi_boilerplate.init();
+//
