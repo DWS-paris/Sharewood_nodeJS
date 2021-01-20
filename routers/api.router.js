@@ -34,7 +34,7 @@ Router definition
                 }
                 else{
                     // Use the controller to create data
-                    const { ok, extra, miss } = checkFields(Mandatory[req.params.endpoint])
+                    const { ok, extra, miss } = checkFields( Mandatory[req.params.endpoint], req.body )
 
                     // Error: bad fields provided
                     if( !ok ){
