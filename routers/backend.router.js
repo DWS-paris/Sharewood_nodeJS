@@ -23,7 +23,7 @@ Router definition
             // Define index route
             this.router.get('/', (req, res) => {
                 // Return "index.ejs" file
-                return res.render('index')
+                return sendApiSuccessResponse(`/register`, 'POST', res, 'Request succeed', null, 'index')
             })
 
             // Define index route
