@@ -9,7 +9,7 @@ Import
 /* 
 CRUD methods
 */
-    const createOne = req => {
+    const createOne = (req, socket) => {
         return new Promise( (resolve, reject) => {
             Models.message.create( req.body )
             .then( async data => {
@@ -26,7 +26,14 @@ CRUD methods
                     { $push: { messages: data._id } }
                 )
 
-                return resolve( await readOne(data._id) )
+                // Get complete message data
+                const newMessage = await readOne(data._id)
+
+                // Emit new message whith Sovket.io
+                socket.emit('new-message', newMessage )
+
+                // Return the data in the API
+                return resolve( newMessage )
             })
             .catch( err => reject(err) )
         })

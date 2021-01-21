@@ -9,7 +9,7 @@ Import
 /* 
 CRUD methods
 */
-    const createOne = req => {
+    const createOne = (req, socket) => {
         return new Promise( (resolve, reject) => {
             // Set first contributor
             req.body.contributors = [req.user._id]

@@ -7,7 +7,7 @@ Import
 /* 
 CRUD methods
 */
-    const createOne = req => {
+    const createOne = (req, socket) => {
         return new Promise( (resolve, reject) => {
             Models.post.create( req.body )
             .then( async data => {

@@ -69,7 +69,7 @@ Server class
 
             // Setup API router
             const ApiRouterClass = require('./routers/api.router');
-            const apiRouter = new ApiRouterClass( { passport } );
+            const apiRouter = new ApiRouterClass( { passport, io: this.io } );
             this.server.use('/api', apiRouter.init());
 
             // Setup backend router
@@ -82,9 +82,6 @@ Server class
         }
 
         launch(){
-            this.io.on('connection', (socket) => {
-                console.log('Client connected', socket.id);
-            });
             // Connect MongoDb
             this.MongoDb.connectDb()
             .then( db => {

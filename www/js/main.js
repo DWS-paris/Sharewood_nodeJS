@@ -14,4 +14,8 @@ Function to check user cookie
     }
 //
 
-const socket = io();
+/* 
+Start interface
+*/
+    const socket = io();
+//

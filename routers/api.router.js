@@ -15,35 +15,42 @@ Imports
 Router definition
 */
     class ApiRooter{
-        constructor( { passport } ){
+        constructor( { passport, io } ){
             this.router = express.Router();
             this.passport = passport;
+            this.io = io;
+
+            
         }
 
         routes(){
-            // CRUD: Create one item
-            this.router.post('/:endpoint', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-                // Check body data
-                if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
-                    return sendBodyError(`/api/${req.params.endpoint}`, 'POST', res, 'No data provided in the reqest body')
-                }
-                else{
-                    // Use the controller to create data
-                    const { ok, extra, miss } = checkFields( Mandatory[req.params.endpoint], req.body )
-
-                    // Error: bad fields provided
-                    if( !ok ){ return sendFieldsError(`/api/${req.params.endpoint}`, 'POST', res, 'Bad fields provided', miss, extra) }
-                    else{
-                        // Define author _id
-                        req.body.author = req.user._id;
-
-                        // Create new object
-                        Controllers[req.params.endpoint].createOne(req)
-                        .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request succeed', apiResponse) )
-                        .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request failed', apiError) );
+            // Set socket connection
+            this.io.on('connection', socket => {
+                // CRUD: Create one item
+                this.router.post('/:endpoint', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                    // Check body data
+                    if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
+                        return sendBodyError(`/api/${req.params.endpoint}`, 'POST', res, 'No data provided in the reqest body')
                     }
-                }
+                    else{
+                        // Use the controller to create data
+                        const { ok, extra, miss } = checkFields( Mandatory[req.params.endpoint], req.body )
+    
+                        // Error: bad fields provided
+                        if( !ok ){ return sendFieldsError(`/api/${req.params.endpoint}`, 'POST', res, 'Bad fields provided', miss, extra) }
+                        else{
+                            // Define author _id
+                            req.body.author = req.user._id;
+
+                            // Create new object
+                            Controllers[req.params.endpoint].createOne(req, socket)
+                            .then( apiResponse => sendApiSuccessResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request succeed', apiResponse) )
+                            .catch( apiError => sendApiErrorResponse(`/api/${req.params.endpoint}`, 'POST', res, 'Request failed', apiError) );
+                        }
+                    }
+                })
             })
+            
 
             // CRUD: Read all item
             this.router.get('/:endpoint', (req, res) => {
