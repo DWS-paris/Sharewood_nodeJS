@@ -1,0 +1,13 @@
+<!-- Importer le header en EJS -->
+<%- include('statics/header') -%>
+
+<main>
+    <h2>chatroom</h2>
+    <p><%- apiResponse.data.description %></p>
+
+    <!-- Charger le formulaire d'ajout de message -->
+    <%- include('components/form-message') %>
+</main>
+
+<!-- Importer le footer en EJS -->
+<%- include('statics/footer') -%>

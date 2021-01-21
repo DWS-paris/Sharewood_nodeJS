@@ -1,9 +1,45 @@
 <!-- Importer le header en EJS -->
-<%- include('statics/header') -%>
+<%- include('statics/header') %>
 
 <main>
-    <h2>Connecté</h2>
+    <h2>Ajouter une chatroom</h2>
+    <!-- Charger le formulaire de création de conversation -->
+    <%- include('components/form-conversation') %>
+
+    <h2>Liste des chatrooms</h2>
+    <!-- Charger le composant pour afficher la liste des conversations -->
+    <% if( apiResponse.data.length > 0 ){ %>
+        <ul>
+    <%    for( let item of apiResponse.data){ %>
+            <li>
+                <h3><%- item.description %></h3>
+                <a href="/conversation/<%- item._id %>">Accéder</a>
+                <a href="api/auth/conversation/<%- item._id %>" class="registerConversation">S'inscrire</a>
+            </li>
+    <% }  %>
+        </ul>
+    <% } %>
 </main>
 
 <!-- Importer le footer en EJS -->
-<%- include('statics/footer') -%>
+<%- include('statics/footer') %>
+
+<script>
+    const conversationLinks = document.querySelectorAll('.registerConversation');
+
+    for( let item of conversationLinks ){
+        item.addEventListener('click', event => {
+            event.preventDefault();
+
+            fetch(event.target.getAttribute('href'), {
+                method: "POST"
+            })
+            .then( reponse => {
+                if(reponse.ok){ return reponse.json() }
+                else{ console.log('error') }
+            })
+            .then( data => console.log(data) )
+            .catch( err => console.log(err) )
+        })
+    }
+</script>

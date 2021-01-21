@@ -1,0 +1,29 @@
+<form action="/api/message" method="POST" id="addMessage">
+    <textarea name="text" required minlength="5"></textarea>
+    <input type="text" name="isPartOf" value="<%- apiResponse.data._id %>" disabled hidden>
+
+    <button type="submit">Ajouter</button>
+</form>
+
+<script>
+    document.querySelector('#addMessage').addEventListener('submit', event => {
+        event.preventDefault();
+
+        fetch(event.target.getAttribute('action'), {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                text: document.querySelector('[name="text"]').value, 
+                isPartOf: document.querySelector('[name="isPartOf"]').value 
+            })
+        })
+        .then( reponse => {
+            if(reponse.ok){ return reponse.json() }
+            else{ console.log('error') }
+        })
+        .then( data => console.log(data) )
+        .catch( err => console.log(err) )
+    })
+</script>

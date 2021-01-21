@@ -28,8 +28,9 @@ Router definition
 
             // Define index route
             this.router.get('/connected', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-                // Return "index.ejs" file
-                return sendApiSuccessResponse(`/register`, 'GET', res, 'Request succeed', null, 'connected')
+                Controllers.conversation.readAll()
+                .then( apiResponse => sendApiSuccessResponse(`/conversation`, 'POST', res, 'Request succeed', apiResponse, 'connected') )
+                .catch( apiError => sendApiErrorResponse(`/conversation`, 'POST', res, 'Request failed', apiError, 'connected') );
             })
 
             this.router.get('/register', (req, res) => {
@@ -69,6 +70,7 @@ Router definition
                     return sendBodyError(`/register`, 'POST', res, 'No data provided in the reqest body', 'login')
                 }
                 else{
+                    // TODO: check admin user email
                     // Use the controller to create data
                     const { ok, extra, miss } = checkFields( Mandatory.login, req.body )
 
@@ -80,6 +82,40 @@ Router definition
                         .catch( apiError => sendApiErrorResponse(`/register`, 'POST', res, 'Request failed', apiError, 'login') );
                     }
                 }
+            })
+
+            // Define GET conversation route
+
+            // Define POST conversation route
+            this.router.post('/conversation', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                // Check body data
+                if( typeof req.body === 'undefined' || req.body === null || Object.keys(req.body).length === 0 ){ 
+                    return sendBodyError(`/conversation`, 'POST', res, 'No data provided in the reqest body', 'connected')
+                }
+                else{
+                    // Use the controller to create data
+                    const { ok, extra, miss } = checkFields( Mandatory.conversation, req.body )
+
+                    // Error: bad fields provided
+                    if( !ok ){ return sendFieldsError(`/conversation`, 'POST', res, 'Bad fields provided', miss, extra, 'connected') }
+                    else{
+                        // Define author _id
+                        req.body.author = req.user._id;
+
+                        // Create new object
+                        Controllers.conversation.createOne(req)
+                        .then( apiResponse => sendApiSuccessResponse(`/conversation`, 'POST', res, 'Request succeed', apiResponse, '/connected', true) )
+                        .catch( apiError => sendApiErrorResponse(`/conversation`, 'POST', res, 'Request failed', apiError, 'connected') );
+                    }
+                }
+            })
+
+            // Define GET conversation/:_id route
+            this.router.get('/conversation/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                // Create new object
+                Controllers.conversation.readOne(req.params._id)
+                .then( apiResponse => sendApiSuccessResponse(`/conversation/${req.params._id}`, 'GET', res, 'Request succeed', apiResponse, `conversation`, ) )
+                .catch( apiError => sendApiErrorResponse(`/conversation/${req.params._id}`, 'GET', res, 'Request failed', apiError, 'connected') );
             })
         }
 
