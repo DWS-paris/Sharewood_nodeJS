@@ -13,3 +13,5 @@ Function to check user cookie
         })
     }
 //
+
+const socket = io();
