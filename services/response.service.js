@@ -1,7 +1,7 @@
 /*
 Service definition
 */
-    const sendBodyError = (endpoint, method, response, errorMessage, render = null, status = 400) => {
+    const sendBodyError = (endpoint, method, response, errorMessage, render = null, redirect = false, status = 400) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -12,12 +12,18 @@ Service definition
         }
 
         // Check if render
-        return render === null
-        ? response.status(status).json(apiResponse)
-        : response.status(status).render(render, { data: apiResponse })
+        if(render !== null){
+            // Check redirect
+            return !redirect
+            ? response.status(status).render(render, { apiResponse })
+            : response.redirect(render, status, { apiResponse })
+        }
+        else{
+            return response.status(status).json(apiResponse);
+        }
     }
 
-    const sendFieldsError = (endpoint, method, response, errorMessage, miss, extra, render = null, status = 400) => {
+    const sendFieldsError = (endpoint, method, response, errorMessage, miss, extra, render = null, redirect = false, status = 400) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -28,12 +34,18 @@ Service definition
         }
 
         // Check if render
-        return render === null
-        ? response.status(status).json(apiResponse)
-        : response.status(status).render(render, { data: apiResponse })
+        if(render !== null){
+            // Check redirect
+            return !redirect
+            ? response.status(status).render(render, { apiResponse })
+            : response.redirect(render, status, { apiResponse })
+        }
+        else{
+            return response.status(status).json(apiResponse);
+        }
     }
 
-    const sendApiSuccessResponse = (endpoint, method, response, successMessage, data, render = null, status = 200) => {
+    const sendApiSuccessResponse = (endpoint, method, response, successMessage, data, render = null, redirect = false, status = 200) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -44,12 +56,18 @@ Service definition
         }
 
         // Check if render
-        return render === null
-        ? response.status(status).json(apiResponse)
-        : response.status(status).render(render, { data: apiResponse })
+        if(render !== null){
+            // Check redirect
+            return !redirect
+            ? response.status(status).render(render, { apiResponse })
+            : response.redirect(render, status, { apiResponse })
+        }
+        else{
+            return response.status(status).json(apiResponse);
+        }
     }
 
-    const sendApiErrorResponse = (endpoint, method, response, errorMessage, error, render = null, status = 500) => {
+    const sendApiErrorResponse = (endpoint, method, response, errorMessage, error, render = null, redirect = false, status = 500) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -60,9 +78,15 @@ Service definition
         }
 
         // Check if render
-        return render === null
-        ? response.status(status).json(apiResponse)
-        : response.status(status).render(render, { data: apiResponse })
+        if(render !== null){
+            // Check redirect
+            return !redirect
+            ? response.status(status).render(render, { apiResponse })
+            : response.redirect(render, status, { apiResponse })
+        }
+        else{
+            return response.status(status).json(apiResponse);
+        }
     }
 // 
 

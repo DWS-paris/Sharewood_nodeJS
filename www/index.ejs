@@ -3,10 +3,17 @@
 
 <main>
 
-    <%- JSON.stringify(data)  %>
-    <%- include('components/form-register') -%>
+    <h2>Non connecté</h2>
 
 </main>
 
 <!-- Importer le footer en EJS -->
 <%- include('statics/footer') -%>
+
+<script>
+    checkUser()
+    .then( apiResponse => {
+        if( apiResponse.data ){ window.location = '/connected' }
+    })
+    .catch( err => console.log(err) )
+</script>

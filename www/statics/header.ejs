@@ -8,8 +8,20 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
         <link rel="stylesheet" href="./css/style.css">
+        <script src="./js/main.js"></script>
     </head>
     <body>
         <header>
             <h1>Back Office NodeJS</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Accueil</a></li>
+                    <% if( apiResponse.data === null ) { %>
+                        <li><a href="/register">Inscription</a></li>
+                        <li><a href="/login">Connexion</a></li>
+                    <% }%>
+                </ul>
+            </nav>
         </header>
+
+       

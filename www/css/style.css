@@ -2,3 +2,14 @@ header, main, footer{
     max-width: 90rem;
     margin: auto;
 }
+
+nav ul{
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li:not(:first-child){
+    margin-left: 1rem;
+}
