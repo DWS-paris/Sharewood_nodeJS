@@ -26,6 +26,7 @@ Router definition
         routes(){
             // Set socket connection
             this.io.on('connection', socket => {
+                console.log('Connection', socket.id)
                 // CRUD: Create one item
                 this.router.post('/:endpoint', this.passport.authenticate('jwt', { session: false }), (req, res) => {
                     // Check body data

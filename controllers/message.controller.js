@@ -29,8 +29,8 @@ CRUD methods
                 // Get complete message data
                 const newMessage = await readOne(data._id)
 
-                // Emit new message whith Sovket.io
-                socket.emit('new-message', newMessage )
+                // Emit new message whith SoCket.io
+                socket.broadcast.emit('new-message', newMessage )
 
                 // Return the data in the API
                 return resolve( newMessage )
