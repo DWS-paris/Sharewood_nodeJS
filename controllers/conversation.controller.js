@@ -89,6 +89,15 @@ CRUD methods
             })
         })
     }
+
+    const registerContributor = req => {
+        return new Promise( (resolve, reject) => {
+            Models.conversation.findOneAndUpdate( { _id: resolve.params._id }, { $push: { contributors: req.user._id } }, (err, data) => {
+                if( err ){ return reject(err) }
+                else{ return resolve(data) }
+            })
+        })
+    }
 //
 
 /* 
@@ -99,6 +108,7 @@ Export controller methods
         readOne,
         createOne,
         updateOne,
-        deleteOne
+        deleteOne,
+        registerContributor
     }
 //

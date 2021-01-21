@@ -70,6 +70,14 @@ Router definition
                 .then( apiResponse => sendApiSuccessResponse(`/api/auth/me`, 'GET', res, 'Request succeed', apiResponse) )
                 .catch( apiError => sendApiErrorResponse(`/api/auth/me`, 'GET', res, 'Request failed', apiError) );
             })
+
+            // Auth: add user has conversation contributor
+            this.router.post('/conversation/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
+                // Get data from the controller
+                Controllers.conversation.registerContributor(req)
+                .then( apiResponse => sendApiSuccessResponse(`/api/auth/conversation`, 'POST', res, 'Request succeed', apiResponse) )
+                .catch( apiError => sendApiErrorResponse(`/api/auth/conversation`, 'POST', res, 'Request failed', apiError) );
+            })
         }
 
         init(){
