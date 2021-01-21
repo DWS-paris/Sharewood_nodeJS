@@ -1,7 +1,7 @@
 /*
 Service definition
 */
-    const sendBodyError = (endpoint, method, response, errorMessage, status = 400) => {
+    const sendBodyError = (endpoint, method, response, errorMessage, render = null, status = 400) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -11,10 +11,13 @@ Service definition
             status: status
         }
 
-        return response.status(status).json(apiResponse);
+        // Check if render
+        return render === null
+        ? response.status(status).json(apiResponse)
+        : response.status(status).render(render, { data: apiResponse })
     }
 
-    const sendFieldsError = (endpoint, method, response, errorMessage, miss, extra, status = 400) => {
+    const sendFieldsError = (endpoint, method, response, errorMessage, miss, extra, render = null, status = 400) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -24,10 +27,13 @@ Service definition
             status: status
         }
 
-        return response.status(status).json(apiResponse);
+        // Check if render
+        return render === null
+        ? response.status(status).json(apiResponse)
+        : response.status(status).render(render, { data: apiResponse })
     }
 
-    const sendApiSuccessResponse = (endpoint, method, response, successMessage, data, status = 200) => {
+    const sendApiSuccessResponse = (endpoint, method, response, successMessage, data, render = null, status = 200) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -37,10 +43,13 @@ Service definition
             status: status
         }
 
-        return response.status(status).json(apiResponse);
+        // Check if render
+        return render === null
+        ? response.status(status).json(apiResponse)
+        : response.status(status).render(render, { data: apiResponse })
     }
 
-    const sendApiErrorResponse = (endpoint, method, response, errorMessage, error, status = 500) => {
+    const sendApiErrorResponse = (endpoint, method, response, errorMessage, error, render = null, status = 500) => {
         const apiResponse = {
             endpoint: endpoint,
             method: method,
@@ -50,7 +59,10 @@ Service definition
             status: status
         }
 
-        return response.status(status).json(apiResponse);
+        // Check if render
+        return render === null
+        ? response.status(status).json(apiResponse)
+        : response.status(status).render(render, { data: apiResponse })
     }
 // 
 
