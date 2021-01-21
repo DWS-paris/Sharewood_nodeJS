@@ -9,7 +9,7 @@ Import
 /* 
 CRUD methods
 */
-    const createOne = (req, socket) => {
+    const createOne = (req, io) => {
         return new Promise( (resolve, reject) => {
             Models.message.create( req.body )
             .then( async data => {
@@ -27,10 +27,8 @@ CRUD methods
                 )
 
                 // Get complete message data
-                const newMessage = await readOne(data._id)
-
-                // Emit new message whith SoCket.io
-                socket.broadcast.emit('new-message', newMessage )
+                const newMessage = await readOne(data._id);
+                io.emit(`new-message-${data.isPartOf}`, newMessage);
 
                 // Return the data in the API
                 return resolve( newMessage )

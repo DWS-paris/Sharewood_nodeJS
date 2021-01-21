@@ -9,9 +9,17 @@ Imports
     const passport = require('passport'); //=> https://www.npmjs.com/package/passport
     const path = require('path'); //=> https://www.npmjs.com/package/path
     const socketIo = require('socket.io');
+    const expsession = require('express-session');
 
     // Services
     const MongoClass = require('./services/mongo.service')
+
+    // Middleware
+    const sessionMiddleware = expsession({
+        secret: process.env.SESSION_SECRET,
+        saveUninitialized: true,
+        resave: true
+    });
 //
 
 /* 
@@ -53,11 +61,19 @@ Server class
             //=> Use CookieParser to setup serverside cookies
             this.server.use(cookieParser(process.env.COOKIE_SECRET));
 
+            // Set middelware
+            this.server.use(sessionMiddleware)
+
             // Start server configuration
             this.config();
         }
 
         config(){
+            // Set Socket IO
+            this.io.use( (socket, next) => {
+                sessionMiddleware(socket.request, socket.request.res, next)
+            })
+
             // Set authentication
             const { setAutentication } = require('./services/auth.service');
             setAutentication(passport);
@@ -74,7 +90,7 @@ Server class
 
             // Setup backend router
             const BackendRouterClass = require('./routers/backend.router'); 
-            const backendRouter = new BackendRouterClass({ passport } );
+            const backendRouter = new BackendRouterClass({ passport, io: this.io } );
             this.server.use('/', backendRouter.init());
 
             // Launch server
@@ -87,6 +103,11 @@ Server class
             .then( db => {
                 // Start server
                 this.app.listen(this.port, () => {
+                    this.io.on('connection', function(socket) {
+                        socket.request.session.socketio = socket.id;
+                        socket.request.session.save();
+                    });
+
                     console.log({
                         node: `http://localhost:${this.port}`,
                         mongo: db.url

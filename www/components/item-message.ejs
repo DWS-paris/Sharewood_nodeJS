@@ -1,6 +1,15 @@
+<ul id="messages"></ul>
+<input type="text" id="conversationId" value="<%- apiResponse.data._id %>">
+
 <script>
     // Get new message
-    socket.on('new-message',  data => {
-        console.log(data)
+    socket.on(`new-message-${document.querySelector('#conversationId').value}`,  data => {
+        console.log(`new-message-${document.querySelector('#conversationId').value}`, data)
+        /* document.querySelector('#messages').innerHTML += `
+            <li>
+                <p>${data.text}</p>
+                <em>${data.author.givenName} ${data.author.familyName}</em>
+            </li>
+        ` */
     })
 </script>

@@ -15,9 +15,10 @@ Imports
 Router definition
 */
     class BackendRooter{
-        constructor( { passport } ){
+        constructor( { passport, io } ){
             this.router = express.Router();
             this.passport = passport;
+            this.io = io;
         }
 
         routes(){
@@ -112,10 +113,17 @@ Router definition
 
             // Define GET conversation/:_id route
             this.router.get('/conversation/:_id', this.passport.authenticate('jwt', { session: false }), (req, res) => {
-                // Create new object
+                // Join correct chatroom
+                const session = req.session;
+                console.log(session.socketio)
+                //this.io.sockets.connected[session.socketio].join(req.params._id)
+
+                
+
+                // Get conversation data
                 Controllers.conversation.readOne(req.params._id)
                 .then( apiResponse => sendApiSuccessResponse(`/conversation/${req.params._id}`, 'GET', res, 'Request succeed', apiResponse, `conversation`, ) )
-                .catch( apiError => sendApiErrorResponse(`/conversation/${req.params._id}`, 'GET', res, 'Request failed', apiError, 'connected') );
+                .catch( apiError => sendApiErrorResponse(`/conversation/${req.params._id}`, 'GET', res, 'Request failed', apiError, 'connected') )
             })
         }
 

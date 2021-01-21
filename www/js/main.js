@@ -18,4 +18,5 @@ Function to check user cookie
 Start interface
 */
     const socket = io();
+    socket.emit('whoami', true)
 //
