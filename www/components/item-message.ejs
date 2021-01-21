@@ -1,0 +1,8 @@
+<script>
+    // Get new message
+    socket.on('new-message',  data => {
+        console.log(data)
+    })
+
+    socket.emit('client-message', { msg: "test" })
+</script>

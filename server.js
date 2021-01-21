@@ -8,6 +8,7 @@ Imports
     const cookieParser = require('cookie-parser'); //=> https://www.npmjs.com/package/cookie-parser
     const passport = require('passport'); //=> https://www.npmjs.com/package/passport
     const path = require('path'); //=> https://www.npmjs.com/package/path
+    const socketIo = require('socket.io');
 
     // Services
     const MongoClass = require('./services/mongo.service')
@@ -19,8 +20,10 @@ Server class
     class ServerClass{
         constructor(){
             this.server = express();
+            this.app = require('http').Server(this.server)
             this.port = process.env.PORT;
             this.MongoDb = new MongoClass();
+            this.io = socketIo(this.app)
         }
 
         init(){
@@ -79,11 +82,14 @@ Server class
         }
 
         launch(){
+            this.io.on('connection', (socket) => {
+                console.log('Client connected', socket.id);
+            });
             // Connect MongoDb
             this.MongoDb.connectDb()
             .then( db => {
                 // Start server
-                this.server.listen(this.port, () => {
+                this.app.listen(this.port, () => {
                     console.log({
                         node: `http://localhost:${this.port}`,
                         mongo: db.url

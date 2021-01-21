@@ -5,6 +5,9 @@
     <h2>chatroom</h2>
     <p><%- apiResponse.data.description %></p>
 
+    <!-- Charger le composant de gestion des messages -->
+    <%- include('components/item-message') %>
+
     <!-- Charger le formulaire d'ajout de message -->
     <%- include('components/form-message') %>
 </main>
